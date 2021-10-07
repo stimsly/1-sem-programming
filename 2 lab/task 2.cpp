@@ -5,17 +5,18 @@ int main()
 {
     cout << "Author: Ignatiev Valerii Alekseevich 1309\n"
         << "Version 2.1.1\n"
-        << "Start: 22.09.2021\n"
-        << "End: 22.09.2021\n\n";
+        << "Start: 05.10.2021\n"
+        << "End: 05.10.2021\n\n";
 
     double a, x;
     int znak = 1;
     cout << "Enter a[-20; 20][20d.6d]: ";
     cin >> a;
-    cout << "\nEnter x[-20; 20][20d.6d]: ";
+    cout << "\nEnter x[20d.6d]: ";
     cin >> x;
 
-    cout << "Answer for x[20d.7d] = " << x << ", equals: ";
+    cout << fixed << setprecision(7);
+    cout << "Answer for x = " << x << ", equals[20d.7d]: ";
     if (!a) {
         if (!x) cout << x;
         else cout << "NaN";
@@ -25,6 +26,7 @@ int main()
     if (a < 0) {
         znak = -1;
         a *= -1;
+        x *= -1;
     }
     x = fmod(x,  4 * a);
     
