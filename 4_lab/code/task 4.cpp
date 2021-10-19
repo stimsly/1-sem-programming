@@ -7,6 +7,10 @@ double a[N];
 int n;
 
 int main() {
+cout << "Author: Ignatiev Valerii Alekseevich 1309\n"
+        << "Version 4.1.1\n"
+        << "Start: 19.10.2021\n"
+        << "End: 19.10.2021\n\n";
     ifstream fin("input.txt");
 
     if (!fin.is_open()) {
