@@ -22,6 +22,14 @@ int main() {
     const double emin = 0.000001,
         emax = 1e10;
 
+    cout << "  n  \n";
+    cout << " ---\n";
+    cout << " \\   (2i + 1)!(i)!\n";
+    cout << " /   ------------- \n";
+    cout << " ---     (3i)!\n";
+    cout << "i = 1\n\n";
+
+
     double x;
     cout << "Enter x[-1e6, 1e6][7d.12d]: ";
     cin >> x;
@@ -30,6 +38,12 @@ int main() {
     double x2 = x;
 
     ofstream fout("output.txt");
+    fout << "  n  \n";
+    fout << " ---\n";
+    fout << " \\   (2i + 1)!(i)!\n";
+    fout << " /   ------------- \n";
+    fout << " ---     (3i)!\n";
+    fout << "i = 1\n\n";
 
     double cur = 1, sum = 0;
     cout << "-----------------------------------------------------------\n";
