@@ -5,7 +5,7 @@ using namespace std;
 
 int main(){
 	
-	ifstream fin("input.txt");
+	ifstream fin("input1.txt");
 	ofstream fout("output.txt");
 	int t;
 	fin >> t;
