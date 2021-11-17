@@ -1,0 +1,43 @@
+Test case: #1
+Initial: 
+1
+1 
+
+Primary:
+1
+1 
+
+
+Secondary:
+1
+1 
+
+Succses
+
+Test case: #2
+Initial: 
+2
+3 1 
+3 1 
+
+Primary:
+2
+3 1 
+3 1 
+
+
+Secondary:
+2
+3 3 
+1 1 
+
+Succses
+
+Test case: #3
+Initial: 
+3
+1 2 3 
+
+1 2 
+Test case number: 3 is incorrect
+
