@@ -3,16 +3,16 @@
 using namespace std;
 
 const int N = 100;
-int a[N];
+double a[N];
 int n;
 
-void f() {
+void f1() {
     ifstream fin("input.txt");
 
-    cout << "Author: Ignatiev Valerii Alekseevich 1309\n"
+    cout << "Author: Dmitrii Kostuk 1309\n"
         << "Version 4.1.1\n"
-        << "Start: 26.10.2021\n"
-        << "End: 26.10.2021\n\n";
+        << "Start: 22.11.2021\n"
+        << "End: 22.11.2021\n\n";
 
     if (!fin.is_open()) {
         cout << "Error while loading file...";
@@ -32,75 +32,76 @@ void f() {
 
     fin.close();
     ofstream fout("output.txt");
-    ofstream fout2("output2.txt");
-    n = min(n, i);
-    i = 0;
-
-    for (int i2 = 0; i2 < n; i2++) {
-        if (a[i2]) {
-            a[i++] = a[i2];
-        }
-    }
 
     n = min(n, i);
-    i = 0;
 
-    cout << "Current size: " << n << "\nArray: ";
-    for (int i = 0; i < n; i++) cout << a[i] << " ";
-    if (!n) cout << "NaN";
-
+    double ans = 1;
 
     fout << "Current size: " << n << "\nArray: ";
     for (int i = 0; i < n; i++) fout << a[i] << " ";
-    if (!n) fout << "NaN";
-    fout.close();
+    if (!n) fout << "Array is empty!";
+    fout << endl;
+
+    for (int i2 = 1; i2 < n; i2 += 2) {
+        ans *= a[i2];
+    }
+
+    fout << "Answer is: ";
+    if (n < 2) fout << "Nan";
+    else fout << ans;
 }
 
-void s() {
-    cout << "Author: Ignatiev Valerii Alekseevich 1309\n"
-        << "Version 4.1.1\n"
-        << "Start: 26.10.2021\n"
-        << "End: 26.10.2021\n\n";
-
-    int* a;
+void f2() {
     ifstream fin("input.txt");
+
+    cout << "Author: Dmitrii Kostuk 1309\n"
+        << "Version 4.1.1\n"
+        << "Start: 22.11.2021\n"
+        << "End: 22.11.2021\n\n";
+
+    if (!fin.is_open()) {
+        cout << "Error while loading file...";
+        return;
+    }
+
     int c = 0;
     while (!fin.eof()) {
-        int a;
+        double a;
         fin >> a;
         c++;
     }
-    
+
     fin.close();
     ifstream fin2("input.txt");
 
-    a = (int*)malloc(c * (sizeof(int)));
+    double* a = new double[c];
 
     for (int i = 0; i < c; i++) fin2 >> *(a + i);
-    int n = 0;
-    fin2.close();
-    for (int i = 0; i < c; i++) {
-        if (*(a + i)) {
-            *(a + n++) = *(a + i);
 
-        }
+
+    fin2.close();
+    ofstream fout("output.txt");
+
+    double ans = 1;
+
+    fout << "Current size: " << c << "\nArray: ";
+    for (int i = 0; i < c; i++) fout << a[i] << " ";
+    if (!c) fout << "Array is empty!";
+    fout << endl;
+
+    for (int i2 = 1; i2 < c; i2 += 2) {
+        ans *= a[i2];
     }
 
-    cout << "Current size: " << n << "\nArray: ";
-    for (int i = 0; i < n; i++) cout << a[i] << " ";
-    if (!n) cout << "NaN";
+    fout << "Answer is: ";
+    if (c < 2) fout << "Nan";
+    else fout << ans;
 
-    ofstream fout("output.txt");
-    fout << "Current size: " << n << "\nArray: ";
-    for (int i = 0; i < n; i++) fout << a[i] << " ";
-    if (!n) fout << "NaN";
-    fout.close();
-
-    free(a);
+    delete[] a;
 }
 
 int main() {
-    
-    s();
+
+    f2();
     return 0;
 }
