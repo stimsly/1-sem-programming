@@ -1,0 +1,68 @@
+
+Total figure(s) is 3
+Another one figure:
+ -1 -1
+1 -1
+1 -2
+2 0
+1 2
+1 1
+-1 1
+-1 2
+-2 0
+-1 -2
+Points inside it:
+ 0.1 0
+1 0.2
+Another one figure:
+ 8 -2
+11 -2
+11 -3
+12 0
+11 3
+11 2
+8 2
+8 3
+7 0
+8 -3
+Points inside it:
+ 8 0
+Another one figure:
+ 8 -2
+13 -2
+13 -3
+14 0
+13 3
+13 2
+8 2
+8 3
+7 0
+8 -3
+Points inside it:
+ 12 1
+12 -1
+11 2
+11 -2
+12 0
+8 0
+14 0
+The best figure(s): 
+Another one figure with 7 point(s) inside is:
+ 8 -2
+13 -2
+13 -3
+14 0
+13 3
+13 2
+8 2
+8 3
+7 0
+8 -3
+Points inside it:
+ 12 1
+12 -1
+11 2
+11 -2
+12 0
+8 0
+14 0

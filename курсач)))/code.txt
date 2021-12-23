@@ -1,0 +1,365 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+ifstream fin("input.txt");
+ofstream fout("output.txt");
+
+const int empty_error = -999999;
+
+struct point {
+	double x;
+	double y;
+};
+
+point p[100];
+point was[100][10];
+int insidecur[100];
+int nwas = 0;
+
+int check_figure(point a[10]);
+
+double area(point a, point b, point c);
+
+bool check_inside(point a[10], point p, int b[10]);
+bool is_on_the_line(point a, point b, point c);
+bool first_half(point a[5]);
+bool intersect(point a, point b, point c, point d);
+bool second_exist(point a[5], point cen, point b[5]);
+bool check_unique(point a[5]);
+bool fwas(point a[10]);
+
+point find_centre(point a, point b, point c, point d);
+point read_one_line();
+
+int n = 0;
+
+int main() {
+
+
+
+	while (1) {
+		point a = read_one_line();
+		if (a.x == empty_error or a.y == empty_error) {
+			break;
+		}
+		else {
+			p[n].x = a.x;
+			p[n++].y = a.y;
+		}
+	}
+	int all = 0;
+	point ans[10];
+	int nmax = -1;
+
+	for (int i1 = 0; i1 < n; i1++) {
+		for (int i2 = 0; i2 < n; i2++) {
+			for (int i3 = 0; i3 < n; i3++) {
+				for (int i4 = 0; i4 < n; i4++) {
+					for (int i5 = 0; i5 < n; i5++) {
+						point first_cur[5] = { p[i1], p[i2], p[i3], p[i4], p[i5] };
+
+						if (!(check_unique(first_cur))) continue;
+						if (!first_half(first_cur)) continue;
+						point cen = find_centre(p[i1], p[i2], p[i3], p[i5]);
+						point second_cur[5];
+
+						if (!(second_exist(first_cur, cen, second_cur))) continue;
+						
+						point ans2[10];
+						ans2[0] = p[i1];
+						ans2[1] = p[i2];
+						ans2[2] = p[i3];
+						ans2[3] = p[i4];
+						ans2[4] = p[i5];
+						ans2[5] = second_cur[0];
+						ans2[6] = second_cur[1];
+						ans2[7] = second_cur[2];
+						ans2[8] = second_cur[3];
+						ans2[9] = second_cur[4];
+						if (fwas(ans2)) continue;
+						
+					}
+				}
+			}
+		}
+	}
+	
+	if (!nwas) {
+		fout << "No one figure exist\n";
+	}
+	else {
+		fout << "\nTotal figure(s) is " << nwas << endl;
+		for (int i = 0; i < nwas; i++) {
+			fout << "Another one figure:\n";
+			for (int j = 0; j < 10; j++) {
+				fout << was[i][j].x << " " << was[i][j].y << endl;
+				
+			}
+			fout << "Points inside it:\n";
+
+			int cur = check_figure(was[i]);
+			if (!cur) fout << "No one point in it!\n";
+			insidecur[i] = cur;
+			if (cur > nmax) {
+				nmax = cur;
+			}
+		}
+		fout << "The best figure(s): \n";
+		for (int i = 0; i < nwas; i++) {
+			
+			if (insidecur[i] != nmax) continue;
+			fout << "Another one figure with " << insidecur[i] << " point(s) inside is:\n";
+			for (int j = 0; j < 10; j++) {
+				fout << was[i][j].x << " " << was[i][j].y << endl;
+
+			}
+			fout << "Points inside it:\n ";
+
+			int cur = check_figure(was[i]);
+			if (!cur) fout << "No one point in it!\n";
+		}
+	
+	}
+
+
+	return 0;
+}
+
+bool fwas(point a[10]) {
+	int n = 10;
+	point b[10];
+	for (int i = 0; i < n; i++) {
+		b[i] = a[n - 1 - i];
+	}
+	for (int k = 0; k < nwas; k++) {
+
+		for (int i = 0; i < n; i++) {
+			int x = 1, x2 = 1;
+			for (int j = 0; j < n; j++) {
+				if (was[k][(j) % n].x != a[(j + i) % n].x or was[k][(j) % n].y != a[(j + i) % n].y) x = 0;
+				if (was[k][(j) % n].x != b[(j + i) % n].x or was[k][(j) % n].y != b[(j + i) % n].y) x2 = 0;
+			}
+
+			if (x or x2) {
+				return 1;
+			}
+		}
+
+	}
+	
+	for (int i = 0; i < n; i++) {
+		was[nwas][i] = a[i];
+	}
+	nwas++;
+	return 1;
+	
+}
+
+
+bool check_unique(point a[5]) {
+	for (int i = 0; i < 5; i++) {
+		for (int j = i + 1; j < 5; j++) {
+			if (a[i].x == a[j].x and a[i].y == a[j].y) return 0;
+		}
+	}
+	return 1;
+}
+
+point find_centre(point a, point b, point c, point d) {
+	point cab, ccd;
+	cab.x = (a.x + b.x) / 2;
+	cab.y = (a.y + b.y) / 2;
+	ccd.x = (c.x + d.x) / 2;
+	ccd.y = (c.y + d.y) / 2;
+
+	point cc;
+	cc.x = (cab.x + ccd.x) / 2;
+	cc.y = (cab.y + ccd.y) / 2;
+
+	point cen;
+	cen.x = (2 * cc.x - b.x);
+	cen.y = (2 * cc.y - b.y);
+	return cen;
+}
+
+bool second_exist(point a[5], point cen, point b[5]) {
+	for (int i = 0; i < 5; i++) {
+		point sec;
+		sec.x = (cen.x - a[i].x) * 2 + a[i].x;
+		sec.y = (cen.y - a[i].y) * 2 + a[i].y;
+		//cout << sec.x << " " << sec.y << endl;
+		int x = 0;
+		for (int j = 0; j < n; j++) {
+			if (p[j].x == sec.x and p[j].y == sec.y) x = 1;
+		}
+		if (!x) return 0;
+		b[i].x = sec.x;
+		b[i].y = sec.y;
+	}
+	return 1;
+}
+
+bool first_half(point a[5]) {
+	point v1, v2;
+	v1.x = a[1].x - a[0].x;
+	v1.y = a[1].y - a[0].y;
+
+	v2.x = a[2].x - a[1].x;
+	v2.y = a[2].y - a[1].y;
+	//12 и 23 перпендикулярны
+	if (v1.x * v2.x + v1.y * v2.y) return 0;
+	//cout << "Complete 1\n";
+	// 34 и 45 равны
+	if ((a[4].x - a[3].x) * (a[4].x - a[3].x) + (a[4].y - a[3].y) * (a[4].y - a[3].y) != (a[2].x - a[3].x) * (a[2].x - a[3].x) + (a[2].y - a[3].y) * (a[2].y - a[3].y)) return 0;
+	//cout << "Complete 2\n";
+	// 12 и 34 не пересекаются
+	if (intersect(a[0], a[1], a[2], a[3])) return 0;
+	// 3 и 4 по разные стороны от прямой 1 2
+	//cout << "Complete 3\n";
+	point v3, v4;
+	v3.x = a[1].x - a[0].x;
+	v3.y = a[1].y - a[0].y;
+
+	v4.x = a[4].x - a[2].x;
+	v4.y = a[4].y - a[2].y;
+	//12 и 53 перпендикулярны
+	if (v3.x * v4.x + v3.y * v4.y) return 0;
+	// длина 34 больше 23
+	//cout << "Complete 4\n";
+	if ((a[2].x - a[1].x) * (a[2].x - a[1].x) + (a[2].y - a[1].y) * (a[2].y - a[1].y) >= (a[3].x - a[2].x) * (a[3].x - a[2].x) + (a[3].y - a[2].y) * (a[3].y - a[2].y)) return 0;
+	//cout << "Complete 5\n";
+	// 1 b 4 лежат по разные стороны
+	if (area(a[1], a[2], a[0]) * area(a[1], a[2], a[3]) >= 0) return 0;
+
+	if (area(a[0], a[1], a[2]) * area(a[0], a[1], a[3]) >= 0) return 0;
+	return 1;
+
+
+}
+
+double area(point a, point b, point c) {
+	return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+}
+
+bool intersect(point a, point b, point c, point d) {
+
+	int res1 = area(c, a, b);
+	int res2 = area(d, a, b);
+
+
+	int res3 = area(a, c, d);
+	int res4 = area(b, c, d);
+
+	//cout << res1 << " " << res2 << " " << res3 << " " << res4 << endl;
+	return ((res1 * res2) <= 0 and (res3 * res4 <= 0));
+}
+
+bool is_on_the_line(point a, point b, point c) {
+	if ((c.x - a.x) * (b.y - a.y) == (c.y - a.y) * (b.x - a.x) and 
+		c.x >= min(a.x, b.x) and c.x <= max(a.x, b.x) and
+		c.y >= min(a.y, b.y) and c.y <= max(a.y, b.y))
+		 return 1;
+	return 0;
+}
+
+bool check_inside(point a[10], point p, int b[10]) {
+	//cout << p.x << " " << p.y << endl;
+
+	for (int i = 0; i < 10; i++) {
+		if (p.x == a[i].x and p.y == a[i].y and !b[i]) {
+			b[i]++;
+			return 0;
+		}
+		else if (p.x == a[i].x and p.y == a[i].y) {
+			return 1;
+		}
+	}
+	//cout << "not a point\n";
+	for (int i = 0; i < 10; i++) {
+		if (is_on_the_line(a[i], a[(i + 1) % 10], p)) {
+			//fout << p.x << " " << p.y << " " << "on line" << "\n";
+			return 1;
+		}
+	}
+	//cout << "not on the line\n";
+	int count = 0;
+	for (int i = 0; i < 10; i++) {
+		point p2;
+		p2.y = p.y;
+		p2.x = 100;
+		//cout << a[i].x << " " << a[i].y << " " << a[(i + 1) % 10].x << " " << a[(i + 1) % 10].y << endl;
+		//cout << intersect(a[i], a[(i + 1) % 10], p, p2) << endl;
+		if (intersect(a[i], a[(i + 1) % 10], p, p2) and p.y != min(a[i].y, a[(i + 1) % 10].y)) count++;
+	}
+	//cout << count << endl;
+	//fout << p.x << " " << p.y << " " << count << "\n";
+	return count % 2;
+}
+
+int check_figure(point a[10]) {
+	int inside = 0;
+	int b[10]{};
+	for (int i = 0; i < n; i++) {
+		if (check_inside(a, p[i], b)) {
+			inside++;
+			fout << p[i].x << " " << p[i].y << endl;
+		}
+		//if (check_inside(a, p[i])) cout << "One of this point is : " << p[i].x << " " << p[i].y << endl;
+	}
+	return inside;
+}
+
+point read_one_line() {
+	/// -999999 = end of line
+	point a;
+	char c;
+	int y = 0;
+	for (int i = 0; i < 2; i++) {
+		int x = 0;
+		double res = 0;
+		int p = 0;
+		int znak = 1;
+		double power = 10;
+
+		while (!fin.eof()) {
+			c = fin.get();
+			if (c == '\n') y = 1;
+			if (c == '-') {
+				znak = -1;
+				x = 1;
+			}
+			else if (c == '.') {
+				p = 1;
+				x = 1;
+			}
+			else if (c <= '9' and c >= '0') {
+				if (p) {
+					x = 1;
+					double cur = c - '0';
+					res += cur / power;
+					power *= 10;
+				}
+				else {
+					x = 1;
+					res = res * 10 + (c - '0');
+				}
+				
+			}
+			else if (x) break;
+		}
+		if (!x) res = empty_error;
+		if(i == 0) a.x = znak * res;
+		else a.y = znak * res;
+	}
+	if (!y) {
+		while (!fin.eof()) {
+			c = fin.get();
+			if (c == '/n') break;
+		}
+	}
+	
+	
+	return a;
+}
